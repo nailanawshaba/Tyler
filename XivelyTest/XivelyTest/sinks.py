@@ -6,7 +6,7 @@ DEBUG = False
 class XivelySink:
     """connects to  Xively and uploads data"""
 
-    __apiKey = "<API KEY>"
+    __apiKey = "b3pjZf4HBFSjdsAGyb9XIOxJ5oT8qJ8BooKtJxfkH3fZcopT"
 
     def __init__(self, feed_id):
         self.__api = xively.XivelyAPIClient(self.__apiKey)

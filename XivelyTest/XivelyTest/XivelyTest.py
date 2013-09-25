@@ -2,7 +2,7 @@ from sinks import XivelySink
 from sources import XBeeListener
 from sensors import Sonometer
 
-SENSORS_FEED = "<FEED ID>"
+SENSORS_FEED = "965209575"
 
 # main program entry point - runs continuously updating our datastream with the
 # current 1 minute load average

@@ -52,7 +52,7 @@ def run():
         while True:
             try:
                 tmp = device.get_current_track_info()
-                if not isSameSong(now_playing, tmp):     
+                if not is_same_song(now_playing, tmp):     
                     print "Now Playing: {0} - {1} ({2})".format(now_playing['artist'], now_playing['title'], now_playing['album'])
                     send_to_peggy("{0}:{1}".format(now_playing['artist'], now_playing['title']))
                     sleep(20)

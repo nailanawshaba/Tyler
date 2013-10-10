@@ -22,7 +22,7 @@ def send_time(hours, minutes):
     return send_command(data)
 
 def send_date(day, month, year):
-    data = pack('BBBBBBB', day / 10, day % 10, month / 10, month % 10, year / 10, year % 10)
+    data = pack('BBBBBBB', cmd_SetDate, day / 10, day % 10, month / 10, month % 10, year / 10, year % 10)
     return send_command(data)
     
 def send_command(data):

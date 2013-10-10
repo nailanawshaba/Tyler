@@ -16,40 +16,20 @@ cmd_SetWeather = 5
 displayMode_Weather = 0
 displayMode_Sonos = 1
 
-def send_time(h1, h2, m1, m2):
-    ser = Serial(SERIAL_PORT, BAUD_RATE)
-    xbee = XBee(ser)
 
-    data = pack('BBBBB', cmd_SetTime, h1, h2, m1, m2)
+def send_time(hours, minutes):
+    data = pack('BBBBB', cmd_SetTime, hours / 10, hours % 10, minutes / 10, minutes % 10)
+    return send_command(data)
 
-    try:
-        xbee.tx(dest_addr=PEGGY_ADDRESS, data=data)
-        ser.close()
-        return True
-    except:
-        ser.close()
-        return False
-
-
-def send_command(command, parameter):
-    ser = Serial(SERIAL_PORT, BAUD_RATE)
-    xbee = XBee(ser)
-
-    data = pack('BB', command, parameter)
-
-    try:
-        xbee.tx(dest_addr=PEGGY_ADDRESS, data=data)
-        ser.close()
-        return True
-    except:
-        ser.close()
-        return False
+def send_date(day, month, year):
+    data = pack('BBBBBBB', day / 10, day % 10, month / 10, month % 10, year / 10, year % 10)
+    return send_command(data)
     
-def send_text(text):
+def send_command(data):
     ser = Serial(SERIAL_PORT, BAUD_RATE)
     xbee = XBee(ser)
     try:
-        xbee.tx(dest_addr=PEGGY_ADDRESS, data=text.upper())
+        xbee.tx(dest_addr=PEGGY_ADDRESS, data=data)
         ser.close()
         return True
     except:

@@ -33,7 +33,7 @@ def send_date(year, month, day):
     return send_command(data)
     
 def send_weather(temperature, humidity, condition):
-    data = pack('BBB', temperature, humidity, conditions[condition])
+    data = pack('BBBB', cmd_SetWeather, temperature, humidity, int(weather_conditions[condition]))
     return send_command(data)
 
 def send_command(data):

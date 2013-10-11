@@ -6,7 +6,7 @@ from soco import SonosDiscovery
 from xbee import XBee
 from serial import Serial
 
-from peggy import send_text, wakeup, sleep
+from peggy import *
 
 PEGGY_ADDRESS = '\xE0\x03'
 

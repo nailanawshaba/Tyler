@@ -6,5 +6,5 @@ def get_current_temperature(location):
 
 def get_current_conditions(location):
     result = get_weather_from_weather_com(location)
-    retval = { 'condition' : result['current_conditions']['text'], 'temperature' : result['current_conditions']['temperature'], 'humidity' : result['current_conditions']['humidity'] }
+    retval = { 'condition' : result['current_conditions']['text'], 'temperature' : int(result['current_conditions']['temperature']), 'humidity' : int(result['current_conditions']['humidity'])}
     return retval

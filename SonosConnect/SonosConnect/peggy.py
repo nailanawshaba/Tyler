@@ -16,15 +16,26 @@ cmd_SetWeather = 5
 displayMode_Weather = 0
 displayMode_Sonos = 1
 
+weather_conditions = {
+    'Sunny' : 0,
+    'Rainy' : 1,
+    'Cloudy' : 2,
+    'Foggy' : 3,
+    'Snowy' : 4
+}
 
 def send_time(hours, minutes):
     data = pack('BBBBB', cmd_SetTime, hours / 10, hours % 10, minutes / 10, minutes % 10)
     return send_command(data)
 
-def send_date(day, month, year):
+def send_date(year, month, day):
     data = pack('BBBBBBB', cmd_SetDate, day / 10, day % 10, month / 10, month % 10, year / 10, year % 10)
     return send_command(data)
     
+def send_weather(temperature, humidity, condition):
+    data = pack('BBB', temperature, humidity, conditions[condition])
+    return send_command(data)
+
 def send_command(data):
     ser = Serial(SERIAL_PORT, BAUD_RATE)
     xbee = XBee(ser)

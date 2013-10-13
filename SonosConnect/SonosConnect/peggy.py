@@ -10,6 +10,7 @@ cmd_SwitchDisplayMode = 0
 cmd_SetDate = 1
 cmd_SetTime = 2
 cmd_SetWeather = 3
+cmd_SetMusicData = 4
 
 displayMode_Sleep = 0
 displayMode_Weather = 1
@@ -38,6 +39,9 @@ def send_date(year, month, day):
 def send_weather(temperature, humidity, condition):
     data = pack('BBBB', cmd_SetWeather, temperature, humidity, int(weather_conditions[condition]))
     return send_command(data)
+
+def send_music_data(artist, album, title):
+    print "Now Playing: {0} - {1} ({2})".format(artist, title, album)
 
 def send_command(data):
     ser = Serial(SERIAL_PORT, BAUD_RATE)

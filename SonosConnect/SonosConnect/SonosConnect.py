@@ -6,11 +6,12 @@ from soco import SonosDiscovery
 from xbee import XBee
 from serial import Serial
 
-from peggy import *
+from peggy import send_music_data
 
 PEGGY_ADDRESS = '\xE0\x03'
 
-ENABLED = False
+device = None
+now_playing = None
 
 def find_sonos():
     ips = []
@@ -30,33 +31,23 @@ def is_same_song(song1, song2):
 
     return False
 
-
-def connect_and_update_peggy():
+def connect():
     ips = find_sonos()
     print "Found {0} device(s)".format(len(ips))
+
     for ip in ips:
+        global device
         device = SoCo(ip)
         zone_name = device.get_speaker_info()['zone_name']
         print "IP of {0} is {1}".format(zone_name, ip)
-        
-        ENABLED = True   
-        now_playing = None
-        
-        wakeup()
 
-        while ENABLED:
-            try:
-                tmp = device.get_current_track_info()
-                if not is_same_song(now_playing, tmp):     
-                    now_playing = tmp
-                    print "Now Playing: {0} - {1} ({2})".format(now_playing['artist'], now_playing['title'], now_playing['album'])
-                    send_text("{0}:{1}".format(now_playing['artist'], now_playing['title']))
-                sleep(20)
-            except KeyboardInterrupt:
-                break
+def update_song_info():
+    global device
+    global now_playing
 
-def disconnect_and_sleep():
-    ENABLED = False
-    sleep()
-    
-connect_and_update_peggy()
+    if device != None:
+        tmp = device.get_current_track_info()
+        if not is_same_song(now_playing, tmp):     
+            now_playing = tmp
+            send_music_data(now_playing['artist'], now_playing['album'], now_playing['title'])
+            

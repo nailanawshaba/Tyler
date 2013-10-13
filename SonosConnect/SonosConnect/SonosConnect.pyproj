@@ -23,6 +23,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="peggy.py" />
+    <Compile Include="peggyController.py" />
     <Compile Include="SonosConnect.py" />
     <Compile Include="weather.py" />
   </ItemGroup>

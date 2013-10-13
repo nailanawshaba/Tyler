@@ -6,15 +6,14 @@ PEGGY_ADDRESS = '\xE0\x03'
 SERIAL_PORT = "/dev/ttyAMA0"
 BAUD_RATE = 9600
 
-cmd_WakeUp = 0
-cmd_Sleep = 1
-cmd_SwitchDisplayMode = 2
-cmd_SetDate = 3
-cmd_SetTime = 4
-cmd_SetWeather = 5
+cmd_SwitchDisplayMode = 0
+cmd_SetDate = 1
+cmd_SetTime = 2
+cmd_SetWeather = 3
 
-displayMode_Weather = 0
-displayMode_Sonos = 1
+displayMode_Sleep = 0
+displayMode_Weather = 1
+displayMode_Sonos = 2
 
 weather_conditions = {
     'Sunny' : 0,
@@ -23,6 +22,10 @@ weather_conditions = {
     'Foggy' : 3,
     'Snowy' : 4
 }
+
+def set_display_mode(displayMode):
+    data = pack('BB', cmd_SwitchDisplayMode, displayMode)
+    return send_command(data);
 
 def send_time(hours, minutes):
     data = pack('BBBBB', cmd_SetTime, hours / 10, hours % 10, minutes / 10, minutes % 10)

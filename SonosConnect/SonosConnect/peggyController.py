@@ -13,9 +13,13 @@ music_on = False
 sleep_on = True
 
 def peggy_weather_loop():
-    global sleep_on, weather_on
+    global sleep_on, music_on, weather_on
     sleep_on = False
+    music_on = False
     weather_on = True
+
+    set_display_mode(displayMode_Weather)
+
     while(weather_on):
         now = datetime.now()
         send_time(now.hour, now.minute)
@@ -27,27 +31,31 @@ def peggy_weather_loop():
         sleep(10)
 
 def peggy_music_loop():
-    global sleep_on, music_on
+    global sleep_on, music_on, weather_on
     sleep_on = False
     music_on = True
+    weather_on = False
+
+    set_display_mode(displayMode_Sonos)
+
     connect()
     while(music_on):
         update_song_info()
         sleep(10)
 
-@app.route("/peggy/weather")
+@server.route("/peggy/weather")
 def peggy_weather():
     weather_thread = Thread(target=peggy_weather_loop)
     weather_thread.start()
     return "OK\r\n"
 
-@app.route("/peggy/music")
+@server.route("/peggy/music")
 def peggy_music():
     music_thread = Thread(target=peggy_music_loop)
     music_thread.start()
     return "OK\r\n"
 
-@app.route("/peggy/sleep")
+@server.route("/peggy/sleep")
 def peggy_sleep():
     global sleep_on, weather_on, music_on
     if weather_on:
@@ -56,8 +64,11 @@ def peggy_sleep():
         music_on = False
     if sleep_on == False:
         sleep_on = True
+
+    set_display_mode(displayMode_Sleep)
+
     return "OK\r\n"
 
 if __name__ == "__main__":
-    app.debug = True
-    app.run(host='0.0.0.0')
+    server.debug = True
+    server.run(host='0.0.0.0')

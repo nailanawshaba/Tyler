@@ -61,6 +61,10 @@ def peggy_music_loop():
             send_music_data(now_playing['artist'], now_playing['album'], now_playing['title'])
         sleep(10)
 
+@server.route("/music/now_playing")
+def music_nowplaying():
+    return json.dumps(get_current_song())
+
 @server.route("/music/pandora/stations/<pandora_email>")
 def music_pandora_stations(pandora_email):
     user = get_pandora_user(pandora_email)

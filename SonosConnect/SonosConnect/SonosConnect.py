@@ -27,7 +27,7 @@ def connect():
 
 def get_current_song():
     global device
-    if device != None:
+    if device == None:
         connect()
 
     now_playing = device.get_current_track_info()
@@ -35,6 +35,9 @@ def get_current_song():
 
 def play_pandora_station(code):
     global device
+    if device == None:
+        connect()
+    
     PLAY_STATION_ACTION ='"urn:schemas-upnp-org:service:AVTransport:1#SetAVTransportURI"'
     TRANSPORT_ENDPOINT = '/MediaRenderer/AVTransport/Control'
     JOIN_RESPONSE = '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"><s:Body><u:SetAVTransportURIResponse xmlns:u="urn:schemas-upnp-org:service:AVTransport:1"></u:SetAVTransportURIResponse></s:Body></s:Envelope>'

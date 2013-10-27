@@ -5,7 +5,9 @@ from time import sleep
 from threading import Thread
 from flask import Flask
 from SonosConnect import connect, get_current_song, play_pandora_station
-from pandora import get_stations
+from pandora import get_pandora_user, get_stations
+
+import json
 
 server = Flask(__name__)
 
@@ -63,11 +65,14 @@ def peggy_music_loop():
 def music_pandora_stations(pandora_email):
     user = get_pandora_user(pandora_email)
     stations = get_stations(user)
-    return stations
+    return json.dumps(stations)
 
 @server.route("/music/pandora/play/<station_code>")
 def music_pandora_play(station_code):
-    play_pandora_station(station_code)
+    if True == play_pandora_station(station_code):
+        return 'OK'
+    else:
+        return 'FAIL'
 
 @server.route("/peggy/weather")
 def peggy_weather():

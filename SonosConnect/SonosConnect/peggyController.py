@@ -65,7 +65,7 @@ def peggy_music_loop():
 def music_nowplaying():
     nowplaying = get_current_song()
     urls = nowplaying['album_art'].split('http://')
-    album_art = 'http://' + tmp[len(urls) - 1]
+    album_art = 'http://' + urls[len(urls) - 1]
     response = { 'artist': nowplaying['artist'], 'album': nowplaying['album'], 'title': nowplaying['title'], 'album_art': album_art }
     return json.dumps(response)
 

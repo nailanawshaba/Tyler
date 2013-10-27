@@ -4,7 +4,7 @@ from datetime import *
 from time import sleep
 from threading import Thread
 from flask import Flask
-from SonosConnect import connect, update_song_info, play_pandora_station
+from SonosConnect import connect, get_current_song, play_pandora_station
 from pandora import get_stations
 
 server = Flask(__name__)
@@ -12,6 +12,17 @@ server = Flask(__name__)
 weather_on = False
 music_on = False
 sleep_on = True
+
+now_playing = None
+
+def is_same_song(song1, song2):
+    if song1 == None or song2 == None:
+        return False
+    
+    if song1['artist'] == song2['artist'] and song1['title'] == song2['title'] and song1['album'] == song2['album']:
+        return True
+
+    return False
 
 def peggy_weather_loop():
     global sleep_on, music_on, weather_on
@@ -39,9 +50,13 @@ def peggy_music_loop():
 
     set_display_mode(displayMode_Sonos)
 
+    global now_playing
     connect()
     while(music_on):
-        update_song_info()
+        tmp = get_current_song()
+        if not is_same_song(now_playing, tmp):     
+            now_playing = tmp
+            send_music_data(now_playing['artist'], now_playing['album'], now_playing['title'])
         sleep(10)
 
 @server.route("/music/pandora/stations/<pandora_email>")
@@ -50,9 +65,9 @@ def music_pandora_stations(pandora_email):
     stations = get_stations(user)
     return stations
 
-@server.route("/music/pandora/play/<email>/<station_title>/<station_code>")
-def music_pandora_play(email, station_title, station_code):
-    play_pandora_station(email, station_title, station_code)
+@server.route("/music/pandora/play/<station_code>")
+def music_pandora_play(station_code):
+    play_pandora_station(station_code)
 
 @server.route("/peggy/weather")
 def peggy_weather():

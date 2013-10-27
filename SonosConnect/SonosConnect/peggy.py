@@ -20,8 +20,10 @@ weather_conditions = {
     'Sunny' : 0,
     'Rainy' : 1,
     'Cloudy' : 2,
+    'Mostly Cloudy' : 2,
     'Foggy' : 3,
-    'Snowy' : 4
+    'Snowy' : 4,
+    'Partly Cloudy': 5
 }
 
 def set_display_mode(displayMode):

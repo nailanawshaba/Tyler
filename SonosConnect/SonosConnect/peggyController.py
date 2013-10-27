@@ -4,7 +4,8 @@ from datetime import *
 from time import sleep
 from threading import Thread
 from flask import Flask
-from SonosConnect import connect, update_song_info
+from SonosConnect import connect, update_song_info, play_pandora_station
+from pandora import get_stations
 
 server = Flask(__name__)
 
@@ -43,13 +44,23 @@ def peggy_music_loop():
         update_song_info()
         sleep(10)
 
+@server.route("/music/pandora/stations/<pandora_email>")
+def music_pandora_stations(pandora_email):
+    user = get_pandora_user(pandora_email)
+    stations = get_stations(user)
+    return stations
+
+@server.route("/music/pandora/play/<email>/<station_title>/<station_code>")
+def music_pandora_play(email, station_title, station_code):
+    play_pandora_station(email, station_title, station_code)
+
 @server.route("/peggy/weather")
 def peggy_weather():
     weather_thread = Thread(target=peggy_weather_loop)
     weather_thread.start()
     return "OK\r\n"
-
-@server.route("/peggy/music")
+    
+@server.route("/peggy/nowplaying")
 def peggy_music():
     music_thread = Thread(target=peggy_music_loop)
     music_thread.start()

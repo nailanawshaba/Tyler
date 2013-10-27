@@ -61,9 +61,13 @@ def peggy_music_loop():
             send_music_data(now_playing['artist'], now_playing['album'], now_playing['title'])
         sleep(10)
 
-@server.route("/music/now_playing")
+@server.route("/music/nowplaying")
 def music_nowplaying():
-    return json.dumps(get_current_song())
+    nowplaying = get_current_song()
+    urls = nowplaying['album_art'].split('http://')
+    album_art = 'http://' + tmp[len(urls) - 1]
+    response = { 'artist': nowplaying['artist'], 'album': nowplaying['album'], 'title': nowplaying['title'], 'album_art': album_art }
+    return json.dumps(response)
 
 @server.route("/music/pandora/stations/<pandora_email>")
 def music_pandora_stations(pandora_email):

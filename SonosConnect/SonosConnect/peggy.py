@@ -43,7 +43,9 @@ def send_weather(temperature, humidity, condition):
     return send_command(data)
 
 def send_music_data(artist, album, title):
+    data = pack('BBBBsss', cmd_SetMusicData, len(artist), len(album), len(title), artist, album, title);
     print "Now Playing: {0} - {1} ({2})".format(artist, title, album)
+    return send_command(data);
 
 def send_command(data):
     ser = Serial(SERIAL_PORT, BAUD_RATE)

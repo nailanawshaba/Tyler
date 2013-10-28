@@ -90,9 +90,13 @@ def peggy_weather():
     
 @server.route("/peggy/nowplaying")
 def peggy_music():
-    music_thread = Thread(target=peggy_music_loop)
-    music_thread.start()
-    return "OK\r\n"
+    global music_on;
+    if music_on == False:
+        music_thread = Thread(target=peggy_music_loop)
+        music_thread.start()
+        return "OK"
+    else:
+        return "ALREADY RUNNING"
 
 @server.route("/peggy/sleep")
 def peggy_sleep():

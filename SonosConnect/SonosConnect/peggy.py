@@ -43,8 +43,9 @@ def send_weather(temperature, humidity, condition):
     return send_command(data)
 
 def send_music_data(artist, album, title):
-    format = 'BBBB'+ str(len(artist)) + 's' + str(len(album)) + 's' + str(len(title)) + 's'
-    data = pack(format, cmd_SetMusicData, len(artist), len(album), len(title), artist, album, title);
+    f = 'BBBB'+ str(len(artist) + 1) + 's' + str(len(album) + 1) + 's' + str(len(title) + 1) + 's'
+    print f
+    data = pack(f, cmd_SetMusicData, len(artist) + 1, len(album) + 1, len(title) + 1, artist + '\0', album + '\0', title + '\0');
     print "Now Playing: {0} - {1} ({2})".format(artist, title, album)
     return send_command(data);
 

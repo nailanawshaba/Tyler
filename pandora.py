@@ -11,11 +11,11 @@ def get_pandora_user(email):
 def get_stations(username):
     response = requests.get('http://feeds.pandora.com/feeds/people/' + username + '/stations.xml')
     dom = XML.fromstring(response.content)
-    stations = {}
+    stations = []
 
     for s in dom.findall(".//item"):
         title = s.find("title").text
         code = s.find('.//{http://www.pandora.com/rss/1.0/modules/pandora/}stationCode').text
-        stations[title] = code.strip("sh")
+        stations.append({ 'name' : title, 'id' : code.strip("sh") })
 
     return stations

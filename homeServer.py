@@ -52,7 +52,7 @@ def volume():
         print "getting volume from Sonos"
         vol = sonos_controller.get_volume()
         print "volume is " + str(vol)
-        response = json.dumps(str(vol))
+        response = str(vol)
     elif request.method == 'POST':
         try:
             desired_vol = json.loads(request.data)['volume']

@@ -2,7 +2,6 @@ from ouimeaux.environment import Environment
 
 # TODO:
 #    - lacks a way to clear the device cache
-#    - need better error handling overall and especially in start_wemo
 
 class WemoController:
     _env = None
@@ -13,7 +12,7 @@ class WemoController:
     def _on_motion(self, motion):
 	print "Motion Sensor found: ", motion.name
 
-    def __init__(self):
+    def connect(self):
 	self._env = Environment(self._on_switch, self._on_motion)
 	try:
 	    self._env.start()

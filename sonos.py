@@ -62,3 +62,17 @@ class SonosController:
 	    return False
 	
 	return True
+
+    def get_volume(self):
+        if self._device == None:
+            self.connect()
+
+        current_volume = self._device.volume()
+        return current_volume
+
+    def set_volume(self, volume):
+        if self._device == None:
+            self.connect()
+
+        result = self._device.volume(volume)
+        return result

@@ -2,7 +2,7 @@
 import json
 
 # external libraries imports
-from flask import Flask
+from flask import Flask, request
 
 # project imports
 import pandora
@@ -16,8 +16,6 @@ server = Flask(__name__)
 peggy_controller = peggy.PeggyController()
 sonos_controller = sonos.SonosController()
 wemo_controller = wemo.WemoController()
-
-sonos_controller.connect()
 
 @server.route("/music/nowplaying")
 def music_nowplaying():
@@ -45,6 +43,26 @@ def music_pause():
     print "Pausing..."
     sonos_controller.pause()
     return "OK\r\n"
+
+@server.route("/music/volume", methods = ['GET', 'POST'])
+def volume():
+    response = None
+    print "requesting volume with method " + request.method
+    if request.method == 'GET':
+        print "getting volume from Sonos"
+        vol = sonos_controller.get_volume()
+        print "volume is " + str(vol)
+        response = json.dumps(str(vol))
+    elif request.method == 'POST':
+        try:
+            desired_vol = json.loads(request.data)['volume']
+            sonos_controller.set_volume(int(desired_vol))
+            response = json.dumps(str(desired_vol))
+        except ValueError:
+            response = Response(status = 400)
+    
+    # Flask takes care of handling return code for bad methods
+    return response
 
 @server.route("/peggy/weather")
 def peggy_weather():
@@ -85,6 +103,10 @@ def wemo_state(switch_name):
     return json.dumps(state)
 
 if __name__ == "__main__":
+    print "Connecting to Sonos"
+    sonos_controller.connect()
+    print "Connecting to Wemo switches"
+    wemo_controller.connect()
     print "Starting Server in debug mode..."
-    server.debug = True
+    #server.debug = True
     server.run(host='0.0.0.0')

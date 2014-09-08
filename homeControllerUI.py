@@ -2,7 +2,7 @@
 
 import sys
 
-from Tkinter import Tk, Frame, Button, BOTH, RIGHT, X
+from Tkinter import Tk, Frame, Button, Label, BOTH, RIGHT, X
 from homeControllerClient import HomeControllerClient
 
 class MainWindow(Frame):
@@ -15,7 +15,14 @@ class MainWindow(Frame):
 		self.initUI()
 
 	def listSwitches(self):
-		switches = self.controller.getSwitches()
+		count = -1
+		while (count == -1):
+			try:
+				switches = self.controller.getSwitches()
+				count = len(switches)
+			except:
+				count = -1
+
 		for b in self.buttons:
 			b.destroy()
 
@@ -41,6 +48,8 @@ class MainWindow(Frame):
 	def initUI(self):
 		self.parent.title("Main Window")
 		self.pack(fill=BOTH, expand=1)
+		lbl = Label(self, text="Home Controller", fg="white", bg="black")
+		lbl.pack(fill=X, padx=5, pady=5)
 		self.listSwitches()
 
 
